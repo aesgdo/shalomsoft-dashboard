@@ -14,15 +14,15 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-# tabla de usuarios
+// tabla de usuarios
 model User {
   id        Int      @id @default(autoincrement())
   name      String
   user      String   @unique
   email     String   @unique
   password  String
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt      @map("updated_at")
+  //createdAt DateTime @default(now()) @map("created_at")
+  //updatedAt DateTime @updatedAt      @map("updated_at")
 
   @@map("users")  // nombre de la tabla en la base de datos
 }
