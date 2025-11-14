@@ -21,8 +21,8 @@ model User {
   user      String   @unique
   email     String   @unique
   password  String
-  //createdAt DateTime @default(now()) @map("created_at")
-  //updatedAt DateTime @updatedAt      @map("updated_at")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt      @map("updated_at") // prisma actualiza este campo automaticamente
 
   @@map("users")  // nombre de la tabla en la base de datos
 }
