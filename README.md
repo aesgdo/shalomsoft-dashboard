@@ -1,2 +1,2 @@
-# dashboard-isaias
+# shalomsoft-dashboard
 Dashboard para consultar clientes
