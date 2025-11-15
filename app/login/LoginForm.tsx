@@ -25,7 +25,7 @@ export default function LoginForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} style={{ display: "grid", gap: "10px" }}>
+    <form onSubmit={handleSubmit} className="flex flex-col p-5 min-h-[180px] items-center justify-center gap-3 w-full">
       <input name="user" placeholder="Usuario" required />
       <input name="password" type="password" placeholder="Contraseña" required />
 
