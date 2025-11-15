@@ -1,5 +1,9 @@
 "use server";
 
+// esta accion de servidor verifica el usuario y contraseña
+// y crea una cookie de sesion para luego redireccional a dashboard
+
+import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcrypt";
 import { cookies } from "next/headers";
@@ -24,14 +28,18 @@ export async function loginAction(formData) {
     return { error: "Contraseña incorrecta" };
   }
 
-  // Crear cookie de sesión (simple)
-  cookies().set({
-    name: "session",
-    value: String(found.id),
+  // cookies() es async en actions
+  const cookieStore = await cookies();
+  // Crear cookie
+  cookieStore.set("session", String(found.id), {
     httpOnly: true,
+    secure: true,
     path: "/",
-    maxAge: 60 * 60 * 24 * 7, // 7 días
+    maxAge: 60 * 60 * 24, // 1 día
   });
+  
+  //return { success: true };
 
-  return { success: true };
+  // Redirigir a dashboard
+  redirect("/dashboard");
 }

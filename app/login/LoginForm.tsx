@@ -20,7 +20,8 @@ export default function LoginForm() {
     }
 
     // Login OK → redirigir
-    window.location.href = "/dashboard";
+    // window.location.href = "/dashboard";
+    // Usar redirect del servidor en lugar de window.location para mejor experiencia
   }
 
   return (
@@ -30,7 +31,7 @@ export default function LoginForm() {
 
       <button type="submit">Entrar</button>
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      {error && <p className="text-red-500">{error}</p>}
     </form>
   );
 }
