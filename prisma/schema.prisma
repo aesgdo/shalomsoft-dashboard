@@ -18,11 +18,110 @@ datasource db {
 model User {
   id        Int      @id @default(autoincrement())
   name      String
-  user      String   @unique
-  email     String   @unique
+  user      String   // @unique se establece en @@unique
+  email     String   // @unique se establece en @@unique
   password  String
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt      @map("updated_at") // prisma actualiza este campo automaticamente
 
   @@map("users")  // nombre de la tabla en la base de datos
+  @@unique([user, email])
+
+  // relaciones
+  sessions     Session[]
+  loans        Loans[]
+  loansDetails LoansDetails[]
+}
+
+// tabla de sesiones
+model Session {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id") 
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt      @map("updated_at") // prisma actualiza este campo automaticamente
+
+  @@unique([userId])
+  @@map("sessions")  // nombre de la tabla en la base de datos
+}
+
+// tabla de clientes (prestatarios o deudores)
+model Clients {
+  id        Int      @id @default(autoincrement())
+  dni       String   // esta es la cédula o NIF
+  name      String
+  email     String   
+  phone     String
+  address   String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt      @map("updated_at") // prisma actualiza este campo automaticamente
+
+  @@unique([dni, email])
+
+  @@map("clients")  // nombre de la tabla en la base de datos
+
+  loans Loans[]
+}
+
+// tabla de prestamos
+model Loans {
+  id              Int      @id @default(autoincrement())
+  customId        String   @map("custom_id")
+  clientId        Int      @map("client_id")
+  client          Clients  @relation(fields: [clientId], references: [id])
+  userId          Int      @map("user_id") // usuario que creo el prestamo
+  user            User     @relation(fields: [userId], references: [id])
+  lenderName      String   // Prestamista o entidad que presta
+  amount          Float    // monto del prestamo
+  ratesPerYear    Float    // interes anual
+  term            Int      // numero de cuotas o plazos
+  frequency       String   // frecuencia de pago (semanal, quincenal, mensual
+  startDate       DateTime @map("start_date") // fecha de inicio del prestamo
+  endDate         DateTime @map("end_date")   // fecha de finalizacion del prestamo
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt      @map("updated_at") // prisma actualiza este campo automaticamente
+
+  @@unique([customId, clientId])
+
+  @@map("loans")  // nombre de la tabla en la base de datos
+
+  details LoansDetails[]
+}
+
+// tabla de detalles de prestamos (pagos realizados)
+model LoansDetails {
+  id          Int      @id @default(autoincrement())
+  loanId      Int      @map("loan_id")
+  loan        Loans    @relation(fields: [loanId], references: [id])
+  userId      Int      @map("user_id") // usuario que registro el pago
+  user        User     @relation(fields: [userId], references: [id])
+  installment Int      // numero de cuota o plazo pagada
+  paymentDate DateTime @map("payment_date")
+  amountPaid  Float    @map("amount_paid")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt      @map("updated_at") // prisma actualiza este campo automaticamente
+
+  @@map("loans_details")  // nombre de la tabla en la base de datos
+
+  @@unique([loanId]) // indexar por loanId para facilitar busquedas
+
+  // relaciones
+  paymentDistributions LoansDetailsPaymentDistribution[]
+}
+
+// tabla de distribucion de pagos de detalles de prestamos
+model LoansDetailsPaymentDistribution {
+  id                 Int      @id @default(autoincrement())
+  loanDetailsId      Int      @map("loan_details_id")
+  loanDetails        LoansDetails @relation(fields: [loanDetailsId], references: [id])
+  principalAmount    Float    @map("principal_amount")    // abono a capital
+  interestAmount     Float    @map("interest_amount")     // interes normal
+  lateinterestAmount Float    @map("lateinterest_amount") // interes por mora
+  feesAmount         Float    @map("fees_amount")         // cargos o comisiones
+  createdAt          DateTime @default(now()) @map("created_at")
+  updatedAt          DateTime @updatedAt      @map("updated_at") // prisma actualiza este campo automaticamente
+
+  @@unique([loanDetailsId])
+  
+  @@map("loans_details_payment_distribution")  // nombre de la tabla en la base de datos
 }
