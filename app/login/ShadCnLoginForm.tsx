@@ -46,7 +46,7 @@ export function ShadCnLoginForm() {
     }
 
   return (
-    <Card className="w-full max-w-sm">
+    <Card className="w-full max-w-sm border-none shadow-none sm:border-solid sm:border-gray-200">
       <form id="login-form" onSubmit={handleSubmit} >
       <CardHeader className="flex flex-col items-center">
         <CardTitle className="font-ubuntu text-[24px] md:text-[36px] text-blue-600">SHALOMSOFT</CardTitle>
