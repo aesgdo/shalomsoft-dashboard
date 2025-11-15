@@ -44,7 +44,7 @@ export async function loginAction(formData) {
 
     
   } catch (error) {
-    return { error: error.message };
+    return { error: "El Servicio no esta disponible. Contacte al administrador." };
   }
 
   // Redirigir a dashboard
