@@ -22,7 +22,7 @@ model User {
   email     String   @unique 
   password  String
   createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt      @map("updated_at") // prisma actualiza este campo automaticamente
+  updatedAt DateTime @updatedAt     @default(now())  @map("updated_at") // prisma actualiza este campo automaticamente
 
   @@map("users")  // nombre de la tabla en la base de datos
   
@@ -41,7 +41,7 @@ model Session {
   userId    Int      @unique @map("user_id") 
   user      User     @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt      @map("updated_at") // prisma actualiza este campo automaticamente
+  updatedAt DateTime @updatedAt    @default(now())   @map("updated_at") // prisma actualiza este campo automaticamente
   
   @@map("sessions")  // nombre de la tabla en la base de datos
 }
@@ -55,7 +55,7 @@ model Clients {
   phone     String
   address   String
   createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt      @map("updated_at") // prisma actualiza este campo automaticamente
+  updatedAt DateTime @updatedAt    @default(now())   @map("updated_at") // prisma actualiza este campo automaticamente
 
   @@map("clients")  // nombre de la tabla en la base de datos
 
@@ -78,7 +78,7 @@ model Loans {
   startDate       DateTime @map("start_date") // fecha de inicio del prestamo
   endDate         DateTime @map("end_date")   // fecha de finalizacion del prestamo
   createdAt       DateTime @default(now()) @map("created_at")
-  updatedAt       DateTime @updatedAt      @map("updated_at") // prisma actualiza este campo automaticamente
+  updatedAt       DateTime @updatedAt   @default(now())    @map("updated_at") // prisma actualiza este campo automaticamente
 
   @@index(customId) // indexar por customId para facilitar busquedas
   @@index(clientId) // indexar por customId para facilitar busquedas
@@ -99,7 +99,7 @@ model LoansDetails {
   paymentDate DateTime @map("payment_date")
   amountPaid  Float    @map("amount_paid")
   createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt      @map("updated_at") // prisma actualiza este campo automaticamente
+  updatedAt   DateTime @updatedAt   @default(now())   @map("updated_at") // prisma actualiza este campo automaticamente
 
   @@map("loans_details")  // nombre de la tabla en la base de datos
 
@@ -119,7 +119,7 @@ model LoansDetailsPaymentDistribution {
   lateinterestAmount Float    @map("lateinterest_amount") // interes por mora
   feesAmount         Float    @map("fees_amount")         // cargos o comisiones
   createdAt          DateTime @default(now()) @map("created_at")
-  updatedAt          DateTime @updatedAt      @map("updated_at") // prisma actualiza este campo automaticamente
+  updatedAt          DateTime @updatedAt    @default(now())   @map("updated_at") // prisma actualiza este campo automaticamente
 
   @@unique([loanDetailsId])
   
