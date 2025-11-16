@@ -29,6 +29,6 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
     "**/*.mts"
-, "app/logout/page.js"  ],
+, "app/logout/page.tsx", "app/logout/actions.ts_old"  ],
   "exclude": ["node_modules"]
 }

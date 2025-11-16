@@ -8,9 +8,13 @@ import { prisma } from "@/lib/prisma";
 import bcrypt from "bcrypt";
 import { cookies } from "next/headers";
 
-export async function loginAction(formData) {
-  const user = formData.get("user");
-  const password = formData.get("password");
+interface FormDataProps {
+  get: (key: string) => FormDataEntryValue | null;  
+};
+
+export async function loginAction(formData: FormDataProps) {
+  const user = formData.get("user") as string;
+  const password = formData.get("password") as string; 
 
   try {
     // Buscar usuario en la DB
@@ -32,11 +36,13 @@ export async function loginAction(formData) {
 
     // cookies() es async en actions
     const cookieStore = await cookies();
+       
     // Crear cookie
-    cookieStore.set("session", String(found.id), {
+    cookieStore.set("session", String(found.id), {      
+      path: "/",
       httpOnly: true,
       secure: true,
-      path: "/",
+      sameSite: "strict",
       maxAge: 60 * 60 * 24 * 30, // 30 días
     });
     

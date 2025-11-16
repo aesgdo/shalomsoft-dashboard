@@ -1,12 +1,18 @@
-import { redirect } from "next/navigation";
+"use client"
+import { useEffect } from "react";
 
-export default async function LogoutPage() {
-  const base = process.env.NEXT_PUBLIC_SITE_URL ?? "https://localhost:3000";
+export default function LogoutPage() {
+  
+  const logOut = async () => {
+    await fetch('/api/logout', {
+      method: 'POST',
+    });
+    window.location.href = '/login'; // Redirigir al login después de cerrar sesión
+  };
 
-  await fetch(`${base}/api/logout`, {
-    method: "POST",
-    cache: "no-store",
-  });
+  useEffect(() => {
+    logOut();     
+  }, []);
 
-  redirect("/login");
+  return null; // por si acaso Next quiere renderizar algo
 }

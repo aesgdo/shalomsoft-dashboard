@@ -4,16 +4,10 @@ export async function POST() {
   const cookieStore = await cookies();
   
   cookieStore.delete("session");
-  
-  /* cookieStore.set("session", "", {
-    httpOnly: true,
-    secure: false,
-    path: "/",
-    maxAge: 0,
-  }); */
 
-  return new Response(JSON.stringify({ ok: true }), {
+  return new Response(JSON.stringify({ ok: true , message: "cookie delete" }), {
     status: 200,
     headers: { "Content-Type": "application/json" },
-  });
+  });  
+
 }
