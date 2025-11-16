@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Ubuntu } from "next/font/google";
+import { SidebarProvider } from "@/components/ui/sidebar"
 import "./globals.css";
 
 const geistSans = Geist({
@@ -33,7 +34,11 @@ export default function RootLayout({
       <body
         className={`${ubuntu.variable} ${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <SidebarProvider>          
+          <main className="w-full">
+            {children}
+          </main>
+        </SidebarProvider>
       </body>
     </html>
   );

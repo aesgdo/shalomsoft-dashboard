@@ -1,14 +1,17 @@
-/*
-  Warnings:
+-- CreateTable
+CREATE TABLE `users` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(191) NOT NULL,
+    `user` VARCHAR(191) NOT NULL,
+    `email` VARCHAR(191) NOT NULL,
+    `password` VARCHAR(191) NOT NULL,
+    `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updated_at` DATETIME(3) NOT NULL,
 
-  - A unique constraint covering the columns `[user,email]` on the table `users` will be added. If there are existing duplicate values, this will fail.
-
-*/
--- DropIndex
-DROP INDEX `users_email_key` ON `users`;
-
--- DropIndex
-DROP INDEX `users_user_key` ON `users`;
+    UNIQUE INDEX `users_user_key`(`user`),
+    UNIQUE INDEX `users_email_key`(`email`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
 CREATE TABLE `sessions` (
@@ -32,7 +35,7 @@ CREATE TABLE `clients` (
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updated_at` DATETIME(3) NOT NULL,
 
-    UNIQUE INDEX `clients_dni_email_key`(`dni`, `email`),
+    UNIQUE INDEX `clients_dni_key`(`dni`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -52,7 +55,10 @@ CREATE TABLE `loans` (
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updated_at` DATETIME(3) NOT NULL,
 
-    UNIQUE INDEX `loans_custom_id_client_id_key`(`custom_id`, `client_id`),
+    UNIQUE INDEX `loans_custom_id_key`(`custom_id`),
+    UNIQUE INDEX `loans_client_id_key`(`client_id`),
+    INDEX `loans_custom_id_idx`(`custom_id`),
+    INDEX `loans_client_id_idx`(`client_id`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -85,9 +91,6 @@ CREATE TABLE `loans_details_payment_distribution` (
     UNIQUE INDEX `loans_details_payment_distribution_loan_details_id_key`(`loan_details_id`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- CreateIndex
-CREATE UNIQUE INDEX `users_user_email_key` ON `users`(`user`, `email`);
 
 -- AddForeignKey
 ALTER TABLE `sessions` ADD CONSTRAINT `sessions_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

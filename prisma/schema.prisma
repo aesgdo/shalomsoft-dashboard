@@ -18,15 +18,17 @@ datasource db {
 model User {
   id        Int      @id @default(autoincrement())
   name      String
-  user      String   // @unique se establece en @@unique
-  email     String   // @unique se establece en @@unique
+  user      String   @unique
+  email     String   @unique 
   password  String
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt      @map("updated_at") // prisma actualiza este campo automaticamente
 
   @@map("users")  // nombre de la tabla en la base de datos
-  @@unique([user, email])
-
+  
+  @@index(user)  // indexar por user para facilitar busquedas
+  @@index(email) // indexar por email para facilitar busquedas
+  
   // relaciones
   sessions     Session[]
   loans        Loans[]
@@ -36,27 +38,24 @@ model User {
 // tabla de sesiones
 model Session {
   id        Int      @id @default(autoincrement())
-  userId    Int      @map("user_id") 
+  userId    Int      @unique @map("user_id") 
   user      User     @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt      @map("updated_at") // prisma actualiza este campo automaticamente
-
-  @@unique([userId])
+  
   @@map("sessions")  // nombre de la tabla en la base de datos
 }
 
 // tabla de clientes (prestatarios o deudores)
 model Clients {
   id        Int      @id @default(autoincrement())
-  dni       String   // esta es la cédula o NIF
+  dni       String   @unique // documento de identidad cedula o dni
   name      String
   email     String   
   phone     String
   address   String
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt      @map("updated_at") // prisma actualiza este campo automaticamente
-
-  @@unique([dni, email])
 
   @@map("clients")  // nombre de la tabla en la base de datos
 
@@ -66,8 +65,8 @@ model Clients {
 // tabla de prestamos
 model Loans {
   id              Int      @id @default(autoincrement())
-  customId        String   @map("custom_id")
-  clientId        Int      @map("client_id")
+  customId        String   @unique @map("custom_id")
+  clientId        Int      @unique @map("client_id")
   client          Clients  @relation(fields: [clientId], references: [id])
   userId          Int      @map("user_id") // usuario que creo el prestamo
   user            User     @relation(fields: [userId], references: [id])
@@ -81,7 +80,8 @@ model Loans {
   createdAt       DateTime @default(now()) @map("created_at")
   updatedAt       DateTime @updatedAt      @map("updated_at") // prisma actualiza este campo automaticamente
 
-  @@unique([customId, clientId])
+  @@index(customId) // indexar por customId para facilitar busquedas
+  @@index(clientId) // indexar por customId para facilitar busquedas
 
   @@map("loans")  // nombre de la tabla en la base de datos
 

@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 
-export async function middleware(request) {
+export async function proxy(request) {
   // cookies() es async en actions
   const cookieStore = await cookies();
 
-  const session = cookieStore.get("session");
+  const session = request.cookies.get("session");
 
   // Si NO hay sesión → redirigir al login
   if (!session) {

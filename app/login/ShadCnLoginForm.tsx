@@ -84,7 +84,7 @@ export function ShadCnLoginForm() {
       <CardFooter className="flex-col gap-2">
         <Button type="submit" className="w-full bg-blue-600 font-bold cursor-pointer hover:bg-blue-700" disabled={disabled} >
           { !disabled ? <span>Iniciar sesión</span> :
-          <div className="h-8 w-8 border-4 border-gray-300 border-t-transparent rounded-full animate-spin"></div>
+          <div className="h-4 w-4 border-4 border-gray-300 border-t-transparent rounded-full animate-spin"></div>
           }
         </Button>
         <div><p className="text-red-500 min-h-[24.01px]">{error}</p></div>        
