@@ -1,5 +1,4 @@
 "use client"
-
 import {
   Card,
   //CardAction,
@@ -13,7 +12,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label"
 import { FormEvent, FormEventHandler, useState } from "react";
-import { loansAction } from "./actions";
+import ClientCard from "./ClientCard";
+
 
 interface userDataProps {
     id: string;
@@ -25,28 +25,106 @@ interface userDataProps {
 export function ShadCnSearchForm(userData: { userData: userDataProps }) {
 
     const [error, setError] = useState("");
-    const [disabled, setDisabled] = useState(false);
-    
+    const [disabled, setDisabled] = useState(false);    
+
+    const [clientData, setClientData] = useState({} as {
+      id: number;
+      dni: string;
+      name: string;
+      email: string;
+      phone: string;
+      address: string;
+      createdAt: string;
+      updatedAt: string;
+      loans: {
+        id: number;
+        customId: string;
+        clientId: number;
+        userId: number;
+        lenderName: string;
+        amount: number;
+        ratesPerYear: number;
+        term: number;
+        frequency: string;
+        startDate: string;
+        endDate: string;
+        createdAt: string;
+        updatedAt: string;
+        details: {
+          id: number;
+          loanId: number;
+          userId: number;
+          installment: number;
+          paymentDate: string;
+          amountPaid: number;
+          createdAt: string;
+          updatedAt: string;
+          paymentDistributions: {
+            id: number;
+            loanDetailsId: number;
+            principalAmount: number;
+            interestAmount: number;
+            lateinterestAmount: number;
+            feesAmount: number;
+            createdAt: string;
+            updatedAt: string;
+          }[];
+        }[];
+      }[];
+    });
+
+    const getClientData = async (formData : FormData) => {
+      
+      //formData.append("userId", userData.userData.id);
+      //console.log("Form Data to send:", Array.from(formData.entries()));
+
+      // obtenemos los datos del cliente
+      const response = await fetch(`/api/clients/search`, {
+        method: "POST",
+        body: formData,
+        cache: "no-store",
+      });
+
+      
+
+      if (!response.ok) {
+        setError("Error al obtener los datos del cliente.");
+      }
+      
+      const jsonData = await response.json();
+
+      console.log("Client data response:", jsonData);
+
+      setClientData(jsonData);
+      setDisabled(false);
+
+    }
+
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-        
+        event.preventDefault();
+
         setError("");
         setDisabled(true);
-        event.preventDefault();
+        
         const target = event.target as HTMLFormElement;
 
         const formData = new FormData(target);
-        // Aquí iría la lógica para manejar la búsqueda con formData
+                
+        getClientData(formData);
+
     }
 
     return (
 
+      <section>
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
 
+          <h2 className="font-bold">Consulta de Préstamo</h2>
           <div className="flex w-full md:max-w-md">
             <Input 
               type="text" 
-              id="clientId" 
-              name="clientId" 
+              id="dni" 
+              name="dni" 
               placeholder="buscar por cédula o número de préstamo"
               className="rounded-none rounded-l-lg"
               required
@@ -62,8 +140,13 @@ export function ShadCnSearchForm(userData: { userData: userDataProps }) {
                 }
                 </Button>
           </div>
-
         
         </form>
+
+        <div className="mt-6">
+          <ClientCard data={clientData}/>
+        </div>
+
+      </section>
     );
 }

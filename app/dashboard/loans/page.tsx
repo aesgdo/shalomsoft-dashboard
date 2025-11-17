@@ -1,44 +1,31 @@
 import { prisma } from "@/lib/prisma";
-import ExportButtons from "./export-buttons";
+import { cookies } from "next/headers";
+import { ShadCnSearchForm } from "./ShadCnSearchForm";
 
 export default async function LoansPage() {
-  const loans = await prisma.loans.findMany({
-    include: { client: true },
-    orderBy: { id: "desc" },
-  });
 
-  return (
-    <div>
-      <h1 className="text-3xl font-bold mb-4">Préstamos</h1>
+    const cookieStore = await cookies();
 
-      {/* botones de exportación */}
-      <ExportButtons />
+    const session = cookieStore.get("session");
+    
+    const id = Number(session?.value);
+    //const id = 2;
 
-      <table
-        id="loansTable"
-        className="w-full border border-gray-300 mt-4 text-left"
-      >
-        <thead>
-          <tr className="bg-gray-100">
-            <th className="p-2 border">Cliente</th>
-            <th className="p-2 border">Monto</th>
-            <th className="p-2 border">Estado</th>
-            <th className="p-2 border">Fecha</th>
-          </tr>
-        </thead>
-        <tbody>
-          {loans.map((loan) => (
-            <tr key={loan.id}>
-              <td className="p-2 border">{loan.client.name}</td>
-              <td className="p-2 border">${loan.amount}</td>
-              <td className="p-2 border">{loan.status}</td>
-              <td className="p-2 border">
-                {new Date(loan.createdAt).toLocaleDateString()}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
+    interface userProps {
+        id: string;
+        name: string;
+        user: string;
+        email: string;
+    }
+
+    const user : userProps = await prisma.user.findUnique({
+        where: { id },
+        select: { id: true, name: true, user: true, email: true },
+    });
+
+   
+
+    return (
+        <ShadCnSearchForm userData={user} />
+    );
 }

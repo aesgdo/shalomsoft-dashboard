@@ -29,6 +29,6 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
     "**/*.mts"
-, "app/logout/page.tsx", "app/logout/actions.ts_old", "app/dashboard/loans/page.tsx.old"  ],
+, "app/logout/page.tsx", "app/logout/actions.ts_old", "app/dashboard/loans/page.tsx", "app/dashboard/loans/page.old", "app/login/_deprecate_LoginForm.tsx.old"  ],
   "exclude": ["node_modules"]
 }
