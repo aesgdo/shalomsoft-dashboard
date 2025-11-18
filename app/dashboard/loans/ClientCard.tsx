@@ -1,5 +1,5 @@
 "use client";
-
+import { FileText, ImageDown, Printer } from 'lucide-react';
 import {
   exportAsImage,
   exportAsPDF,
@@ -41,29 +41,30 @@ export default function ClientCard({ data } : { data: any }) {
   return (
     <>
         { loan ? (
-        <div className="w-full max-w-3xl mx-auto">
+        <div className="w-full max-w-3xl mr-auto">
 
         {/* --- Botones de exportación --- */}
-        <div className="flex gap-3 justify-end mb-4">
-            <button
+        <div className="flex gap-3 justify-end mb-4 items-center">
+            <p>Exportar: </p>
+            <button title='Exportar PDF'
             onClick={() => exportAsPDF("client-info-card")}
-            className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
+            className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition cursor-pointer"
             >
-            Exportar PDF
+            <FileText/>
             </button>
 
-            <button
+            <button title='Exportar Imagen'
             onClick={() => exportAsImage("client-info-card")}
-            className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+            className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition cursor-pointer"
             >
-            Exportar Imagen
+            <ImageDown/> 
             </button>
 
-            <button
+            <button title="Imprimir"
             onClick={() => printSection("client-info-card")}
-            className="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800 transition"
+            className="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800 transition cursor-pointer"
             >
-            Imprimir
+            <Printer/>
             </button>
         </div>
 
